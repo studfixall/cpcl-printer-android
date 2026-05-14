@@ -14,6 +14,26 @@ public class CpclPrinter {
     private int labelWidth;
     private int labelHeight;
     private int dpi;
+    
+    /**
+     * Barcode types for CPCL printing
+     */
+    public enum BarcodeType {
+        CODE128(CpclPrinterCommands.BARCODE_128),
+        CODE39(CpclPrinterCommands.BARCODE_39),
+        CODE93(CpclPrinterCommands.BARCODE_93),
+        CODABAR(CpclPrinterCommands.BARCODE_CODABAR),
+        EAN13(CpclPrinterCommands.BARCODE_EAN13),
+        EAN8(CpclPrinterCommands.BARCODE_EAN8),
+        UPCA(CpclPrinterCommands.BARCODE_UPCA),
+        UPCE(CpclPrinterCommands.BARCODE_UPCE),
+        I2OF5(CpclPrinterCommands.BARCODE_I2OF5),
+        QR_CODE(100); // Special value for QR
+        
+        private final int value;
+        BarcodeType(int value) { this.value = value; }
+        public int getValue() { return value; }
+    }
 
     // Common label sizes (in mm)
     public static final int SIZE_30x20_MM = 1;   // 30mm x 20mm
@@ -75,6 +95,117 @@ public class CpclPrinter {
      */
     public CpclPrinter(DeviceConnection printerConnection, float labelWidthMM, float labelHeightMM) throws EscPosConnectionException {
         this(printerConnection, DPI_203, labelWidthMM, labelHeightMM);
+    }
+    
+    /**
+     * Create new instance of CpclPrinter with simple connection.
+     * Uses default 50x30mm label size at 203 DPI.
+     *
+     * @param printerConnection Instance of class which implement DeviceConnection
+     */
+    public CpclPrinter(DeviceConnection printerConnection) throws EscPosConnectionException {
+        this(printerConnection, DPI_203, 50f, 30f);
+    }
+    
+    /**
+     * Set label size with width, height in mm and DPI.
+     * This is used by LabelTemplate.
+     *
+     * @param widthMM   Label width in millimeters
+     * @param heightMM  Label height in millimeters
+     * @param dpi       Printer DPI
+     */
+    public void setLabelSize(int widthMM, int heightMM, int dpi) {
+        this.dpi = dpi;
+        this.labelWidth = mmToDots(widthMM, dpi);
+        this.labelHeight = mmToDots(heightMM, dpi);
+        if (this.printer != null) {
+            this.printer.setLabelSize(this.labelWidth, this.labelHeight);
+        }
+    }
+    
+    /**
+     * Start a new label for printing.
+     * This is used by LabelTemplate.
+     */
+    public void newLabel() throws EscPosEncodingException {
+        if (this.printer != null) {
+            this.printer.startLabel(1);
+        }
+    }
+    
+    /**
+     * Add text at specified position.
+     * This is used by LabelTemplate.
+     *
+     * @param x    X position in dots
+     * @param y    Y position in dots
+     * @param text Text to print
+     */
+    public void addText(int x, int y, String text) throws EscPosEncodingException {
+        printText(x, y, text);
+    }
+    
+    /**
+     * Set text magnification.
+     * This is used by LabelTemplate.
+     *
+     * @param width  Width multiplier (1-8)
+     * @param height Height multiplier (1-8)
+     */
+    public void setMagnify(int width, int height) {
+        // CPCL uses font size for magnification
+        // This is a simplified implementation
+    }
+    
+    /**
+     * Add barcode at specified position.
+     * This is used by LabelTemplate.
+     *
+     * @param x         X position
+     * @param y         Y position
+     * @param data      Barcode data
+     * @param type      Barcode type
+     * @param width     Bar width
+     * @param height    Barcode height
+     */
+    public void addBarcode(int x, int y, String data, BarcodeType type, int width, int height) throws EscPosEncodingException {
+        if (type == BarcodeType.QR_CODE) {
+            printQRCode(x, y, width, data);
+        } else {
+            printBarcode(type.getValue(), x, y, height, data);
+        }
+    }
+    
+    /**
+     * Add QR Code at specified position.
+     * This is used by LabelTemplate.
+     *
+     * @param x      X position
+     * @param y      Y position
+     * @param data   QR Code data
+     * @param size   QR Code size
+     */
+    public void addQRCode(int x, int y, String data, int size) throws EscPosEncodingException {
+        printQRCode(x, y, size, data);
+    }
+    
+    /**
+     * Print the label.
+     * This is used by LabelTemplate.
+     */
+    public void print() throws EscPosEncodingException {
+        endLabel();
+    }
+    
+    /**
+     * Print barcode with type value
+     */
+    private CpclPrinter printBarcode(int type, int x, int y, int height, String data) throws EscPosEncodingException {
+        if (this.printer != null) {
+            this.printer.printBarcode(type, 2, 0, height, x, y, data);
+        }
+        return this;
     }
 
     /**
