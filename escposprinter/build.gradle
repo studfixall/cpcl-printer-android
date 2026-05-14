@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
+    namespace 'com.dantsu.escposprinter'
     compileSdkVersion 33
 
     defaultConfig {
