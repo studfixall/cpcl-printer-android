@@ -28,20 +28,11 @@ jobs:
     - name: Build Debug APK
       run: ./gradlew assembleDebug
       
-    - name: Build Release APK
-      run: ./gradlew assembleRelease
-      
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
       with:
         name: debug-apk
         path: app/build/outputs/apk/debug/*.apk
-        
-    - name: Upload Release APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: release-apk
-        path: app/build/outputs/apk/release/*.apk
         
     - name: Create Release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -53,4 +44,3 @@ jobs:
         title: "Latest Build"
         files: |
           app/build/outputs/apk/debug/*.apk
-          app/build/outputs/apk/release/*.apk
