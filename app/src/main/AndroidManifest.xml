@@ -27,6 +27,8 @@
         </activity>
         <activity android:name="com.dantsu.escposprinter.example.CpclLabelPrintActivity"
             android:label="CPCL 标签打印" />
+        <activity android:name="com.dantsu.escposprinter.example.BatchPrintActivity"
+            android:label="批量标签打印" />
     </application>
 
 </manifest>

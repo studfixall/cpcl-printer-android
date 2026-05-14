@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="template_types">
+        <item>超市价格标签 (50x30mm)</item>
+        <item>库存标签 (60x40mm)</item>
+        <item>物流标签 (100x80mm)</item>
+        <item>货架标签 (40x20mm)</item>
+        <item>生鲜标签 (50x35mm)</item>
+        <item>自定义</item>
+    </string-array>
+</resources>

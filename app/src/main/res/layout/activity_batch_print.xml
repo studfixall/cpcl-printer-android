@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="批量标签打印"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 模板选择 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="选择标签模板"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerTemplate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" />
+
+        <!-- 店铺名称 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="店铺名称"
+            android:textSize="14sp"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/etStoreName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入店铺名称"
+            android:inputType="text" />
+
+        <!-- 商品数据 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="商品数据（每行一个，格式: 商品名,价格,条码 或 商品名,价格,原价,条码）"
+            android:textSize="14sp"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/etProductList"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:hint="例如:\n苹果,5.99,6901234567890\n香蕉,3.50,2.80,6901234567891\n牛奶,12.80,6901234567892"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:background="@android:drawable/edit_text" />
+
+        <!-- 加载示例按钮 -->
+        <Button
+            android:id="@+id/btnLoadDemo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="加载示例数据"
+            android:layout_marginTop="8dp" />
+
+        <!-- 进度显示 -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
+
+        <!-- 操作按钮 -->
+        <Button
+            android:id="@+id/btnBatchPrint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="开始批量打印"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnCancelPrint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="取消打印"
+            android:layout_marginTop="8dp"
+            android:enabled="false" />
+
+        <!-- 使用说明 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\n使用说明：\n\n1. 选择标签模板类型\n2. 输入店铺名称\n3. 输入商品数据（每行一个）\n4. 点击开始批量打印\n\n数据格式：\n• 商品名,价格,条码\n• 商品名,价格,原价,条码\n\n模板说明：\n• 超市价格标签：50x30mm，含商品名、价格、条码\n• 库存标签：60x40mm，含SKU、数量、位置、二维码\n• 物流标签：100x80mm，含收发件信息、运单号\n• 货架标签：40x20mm，简洁的货架编号\n• 生鲜标签：50x35mm，含产地、日期、追溯码"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+</ScrollView>
