@@ -1,4 +1,4 @@
-package com.dantsu.escposprinter.example;
+package com.dantsu.thermalprinter;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
@@ -19,7 +19,6 @@ import com.dantsu.escposprinter.CpclPrinter;
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection;
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
 import com.dantsu.escposprinter.textparser.PrinterTextParserImg;
-import com.dantsu.thermalprinter.R;
 
 /**
  * CPCL 标签打印示例 Activity

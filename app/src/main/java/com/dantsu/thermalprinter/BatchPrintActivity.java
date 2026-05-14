@@ -1,4 +1,4 @@
-package com.dantsu.escposprinter.example;
+package com.dantsu.thermalprinter;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -18,9 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.dantsu.thermalprinter.R;
+import com.dantsu.escposprinter.example.BatchPrintManager;
+import com.dantsu.escposprinter.example.LabelTemplate;
 import com.dantsu.escposprinter.example.LabelTemplate.ProductInfo;
-import com.dantsu.thermalprinter.R;
 
 import java.util.List;
 
