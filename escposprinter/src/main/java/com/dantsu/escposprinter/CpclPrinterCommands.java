@@ -506,21 +506,21 @@ public class CpclPrinterCommands {
             int byteIndex = headerBytes.length;
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < bytesPerRow; col++) {
-                    byte b = 0;
+                    byte pixelByte = 0;
                     for (int bit = 0; bit < 8; bit++) {
                         int pixelX = col * 8 + bit;
                         if (pixelX < width) {
                             int pixel = bitmap.getPixel(pixelX, row);
                             int r = (pixel >> 16) & 0xff;
                             int g = (pixel >> 8) & 0xff;
-                            int b = pixel & 0xff;
+                            int blue = pixel & 0xff;
                             // If dark pixel, set bit
-                            if ((r + g + b) / 3 < 128) {
-                                b |= (1 << (7 - bit));
+                            if ((r + g + blue) / 3 < 128) {
+                                pixelByte |= (1 << (7 - bit));
                             }
                         }
                     }
-                    imageBytes[byteIndex++] = b;
+                    imageBytes[byteIndex++] = pixelByte;
                 }
             }
 
