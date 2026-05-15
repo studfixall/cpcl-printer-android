@@ -1,5 +1,7 @@
 package com.dantsu.escposprinter.example;
 
+import com.dantsu.thermalprinter.R;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;

@@ -227,16 +227,31 @@ public class LabelTemplate implements Serializable {
     private void printBarcodeComponent(CpclPrinter printer, BarcodeComponent component, DataProvider dataProvider) 
             throws EscPosEncodingException {
         String value = component.getValue(dataProvider);
-        printer.printBarcode(
-            component.getCpclBarcodeType(),
-            component.getBarWidth(),
-            component.getRatio(),
-            component.getHeight(),
-            component.getX(),
-            component.getY(),
-            value,
-            component.isShowText()
-        );
+        // 使用 CpclPrinter 的公共 API - 根据条码类型选择对应方法
+        switch (component.getBarcodeType()) {
+            case CODE128:
+                printer.printBarcode128(component.getX(), component.getY(), component.getHeight(), value);
+                break;
+            case CODE39:
+                printer.printBarcode39(component.getX(), component.getY(), component.getHeight(), value);
+                break;
+            case EAN13:
+                printer.printBarcodeEAN13(component.getX(), component.getY(), component.getHeight(), value);
+                break;
+            case EAN8:
+                printer.printBarcodeEAN8(component.getX(), component.getY(), component.getHeight(), value);
+                break;
+            case UPCA:
+                printer.printBarcodeUPCA(component.getX(), component.getY(), component.getHeight(), value);
+                break;
+            case UPCE:
+                printer.printBarcodeUPCE(component.getX(), component.getY(), component.getHeight(), value);
+                break;
+            default:
+                // 默认使用 Code 128
+                printer.printBarcode128(component.getX(), component.getY(), component.getHeight(), value);
+                break;
+        }
     }
     
     private void printQRCodeComponent(CpclPrinter printer, QRCodeComponent component, DataProvider dataProvider) 

@@ -1,5 +1,7 @@
 package com.dantsu.escposprinter.example;
 
+import com.dantsu.thermalprinter.R;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection;
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
 import com.dantsu.escposprinter.template.BarcodeComponent;
 import com.dantsu.escposprinter.template.LabelComponent;
@@ -375,7 +378,18 @@ public class TemplateEditActivity extends AppCompatActivity {
 
     private void showBluetoothDeviceDialog() {
         BluetoothPrintersConnections printers = new BluetoothPrintersConnections();
-        BluetoothDevice[] devices = printers.getList();
+        BluetoothConnection[] connections = printers.getList();
+        
+        if (connections == null || connections.length == 0) {
+            Toast.makeText(this, "未找到蓝牙打印机", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        // 转换为 BluetoothDevice 数组
+        BluetoothDevice[] devices = new BluetoothDevice[connections.length];
+        for (int i = 0; i < connections.length; i++) {
+            devices[i] = connections[i].getDevice();
+        }
 
         if (devices == null || devices.length == 0) {
             Toast.makeText(this, "未找到蓝牙打印机", Toast.LENGTH_SHORT).show();
