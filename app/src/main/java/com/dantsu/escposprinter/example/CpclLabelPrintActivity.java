@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +19,6 @@ import androidx.core.content.ContextCompat;
 import com.dantsu.escposprinter.CpclPrinter;
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection;
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
-import com.dantsu.escposprinter.textparser.PrinterTextParserImg;
 import com.dantsu.thermalprinter.R;
 
 /**
@@ -27,6 +27,7 @@ import com.dantsu.thermalprinter.R;
  */
 public class CpclLabelPrintActivity extends AppCompatActivity {
 
+    private static final String TAG = "CpclLabelPrint";
     private static final int PERMISSION_BLUETOOTH = 1;
     private static final int PERMISSION_BLUETOOTH_ADMIN = 2;
     private static final int PERMISSION_BLUETOOTH_CONNECT = 3;
@@ -91,13 +92,42 @@ public class CpclLabelPrintActivity extends AppCompatActivity {
             barcode = "6901234567890";
         }
 
-        BluetoothConnection connection = BluetoothPrintersConnections.selectFirstPaired();
+        // 检查蓝牙权限
+        if (!checkBluetoothPermission()) {
+            return;
+        }
+
+        // 检查蓝牙适配器
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            Toast.makeText(this, "设备不支持蓝牙", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (!bluetoothAdapter.isEnabled()) {
+            Toast.makeText(this, "请先开启蓝牙", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        BluetoothConnection connection = null;
+        try {
+            connection = BluetoothPrintersConnections.selectFirstPaired();
+        } catch (Exception e) {
+            Log.e(TAG, "蓝牙连接错误", e);
+            Toast.makeText(this, "蓝牙连接错误: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
         if (connection == null) {
-            Toast.makeText(this, "未找到配对的蓝牙打印机", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "未找到配对的蓝牙打印机\n请先配对打印机", Toast.LENGTH_LONG).show();
             return;
         }
 
         try {
+            // 确保连接已建立
+            if (!connection.isConnected()) {
+                connection.connect();
+            }
+            
             CpclPrinter printer = new CpclPrinter(connection);
 
             // 标签尺寸：50mm x 30mm，300dpi
@@ -123,8 +153,13 @@ public class CpclLabelPrintActivity extends AppCompatActivity {
 
             Toast.makeText(this, "标签打印成功", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "打印失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "打印失败", e);
+            Toast.makeText(this, "打印失败: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        } finally {
+            // 断开连接
+            if (connection != null && connection.isConnected()) {
+                connection.disconnect();
+            }
         }
     }
 
@@ -132,13 +167,43 @@ public class CpclLabelPrintActivity extends AppCompatActivity {
      * 打印测试标签 - 多种元素展示
      */
     private void printTestLabel() {
-        BluetoothConnection connection = BluetoothPrintersConnections.selectFirstPaired();
+        // 检查蓝牙权限
+        if (!checkBluetoothPermission()) {
+            Toast.makeText(this, "请先授予蓝牙权限", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 检查蓝牙适配器
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            Toast.makeText(this, "设备不支持蓝牙", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (!bluetoothAdapter.isEnabled()) {
+            Toast.makeText(this, "请先开启蓝牙", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        BluetoothConnection connection = null;
+        try {
+            connection = BluetoothPrintersConnections.selectFirstPaired();
+        } catch (Exception e) {
+            Log.e(TAG, "蓝牙连接错误", e);
+            Toast.makeText(this, "蓝牙连接错误: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
         if (connection == null) {
-            Toast.makeText(this, "未找到配对的蓝牙打印机", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "未找到配对的蓝牙打印机\n请先配对打印机", Toast.LENGTH_LONG).show();
             return;
         }
 
         try {
+            // 确保连接已建立
+            if (!connection.isConnected()) {
+                connection.connect();
+            }
+            
             CpclPrinter printer = new CpclPrinter(connection);
 
             // 标签尺寸：60mm x 40mm，203dpi
@@ -171,9 +236,32 @@ public class CpclLabelPrintActivity extends AppCompatActivity {
 
             Toast.makeText(this, "测试标签打印成功", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "打印失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "打印失败", e);
+            Toast.makeText(this, "打印失败: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        } finally {
+            // 断开连接
+            if (connection != null && connection.isConnected()) {
+                connection.disconnect();
+            }
         }
+    }
+
+    /**
+     * 检查蓝牙权限
+     */
+    private boolean checkBluetoothPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_BLUETOOTH_CONNECT);
+                return false;
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH}, PERMISSION_BLUETOOTH);
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
