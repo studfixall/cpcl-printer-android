@@ -1,5 +1,24 @@
 apply plugin: 'com.android.application'
 
+def getBuildTime() {
+    return new Date().format("yyyyMMdd_HHmm", TimeZone.getTimeZone("Asia/Shanghai"))
+}
+
+def getGitCommitShort() {
+    def commit = ""
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-parse', '--short', 'HEAD'
+            standardOutput = stdout
+        }
+        commit = stdout.toString().trim()
+    } catch (Exception e) {
+        commit = "unknown"
+    }
+    return commit
+}
+
 android {
     namespace 'com.dantsu.thermalprinter'
     compileSdkVersion 33
@@ -11,6 +30,17 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def buildType = variant.buildType.name
+            def versionName = variant.versionName
+            def buildTime = getBuildTime()
+            def gitCommit = getGitCommitShort()
+            outputFileName = "CPCLPrinter_v${versionName}_${buildType}_${buildTime}_${gitCommit}.apk"
+        }
+    }
+    
     buildTypes {
         release {
             minifyEnabled false
