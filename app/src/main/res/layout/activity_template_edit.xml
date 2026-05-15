@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- 模板基本信息 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etTemplateName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="模板名称"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/etTemplateWidth"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="宽(mm)"
+            android:inputType="number"
+            android:text="50" />
+
+        <EditText
+            android:id="@+id/etTemplateHeight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="高(mm)"
+            android:inputType="number"
+            android:text="30" />
+
+        <EditText
+            android:id="@+id/etTemplateDpi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="DPI"
+            android:inputType="number"
+            android:text="203" />
+    </LinearLayout>
+
+    <!-- 主编辑区 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <!-- 左侧工具栏 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="添加组件"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnAddText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="文本"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btnAddBarcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="条码"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btnAddQRCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="二维码"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btnAddLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="线条"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="8dp"
+                android:background="#CCCCCC" />
+
+            <Button
+                android:id="@+id/btnDeleteComponent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="删除"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnPrintTest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="打印测试"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btnSaveTemplate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="保存"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- 画布区域 -->
+        <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="#F0F0F0"
+            android:padding="8dp">
+
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <com.dantsu.escposprinter.example.LabelCanvasView
+                    android:id="@+id/labelCanvas"
+                    android:layout_width="400dp"
+                    android:layout_height="300dp"
+                    android:background="#FFFFFF" />
+            </ScrollView>
+        </HorizontalScrollView>
+
+        <!-- 右侧属性面板 -->
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#F5F5F5"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:id="@+id/componentPropertiesPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="组件属性"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="点击画布上的组件以编辑属性"
+                    android:textColor="#888888" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>

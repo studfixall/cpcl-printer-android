@@ -35,6 +35,12 @@
         <activity android:name="com.dantsu.escposprinter.example.BatchPrintActivity"
             android:label="批量标签打印"
             android:exported="false" />
+        <activity android:name="com.dantsu.escposprinter.example.TemplateListActivity"
+            android:label="标签模板管理"
+            android:exported="false" />
+        <activity android:name="com.dantsu.escposprinter.example.TemplateEditActivity"
+            android:label="编辑模板"
+            android:exported="false" />
     </application>
 
 </manifest>

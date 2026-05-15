@@ -87,6 +87,13 @@
             android:layout_marginBottom="20dp"
             android:text="Print by TCP !" />
 
+        <Button
+            android:id="@+id/button_template_manager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="标签模板管理"
+            android:backgroundTint="#4CAF50" />
 
     </LinearLayout>
 

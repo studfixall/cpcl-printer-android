@@ -79,7 +79,19 @@ public class MainActivity extends AppCompatActivity {
                 printTcp();
             }
         });
+        button = (Button) findViewById(R.id.button_template_manager);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openTemplateManager();
+            }
+        });
 
+    }
+
+    public void openTemplateManager() {
+        Intent intent = new Intent(this, com.dantsu.escposprinter.example.TemplateListActivity.class);
+        startActivity(intent);
     }
 
 
