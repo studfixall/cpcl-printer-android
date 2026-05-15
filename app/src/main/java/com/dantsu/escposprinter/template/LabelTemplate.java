@@ -232,24 +232,17 @@ public class LabelTemplate implements Serializable {
             case CODE128:
                 printer.printBarcode128(component.getX(), component.getY(), component.getHeight(), value);
                 break;
-            case CODE39:
-                printer.printBarcode39(component.getX(), component.getY(), component.getHeight(), value);
-                break;
             case EAN13:
                 printer.printBarcodeEAN13(component.getX(), component.getY(), component.getHeight(), value);
-                break;
-            case EAN8:
-                printer.printBarcodeEAN8(component.getX(), component.getY(), component.getHeight(), value);
                 break;
             case UPCA:
                 printer.printBarcodeUPCA(component.getX(), component.getY(), component.getHeight(), value);
                 break;
-            case UPCE:
-                printer.printBarcodeUPCE(component.getX(), component.getY(), component.getHeight(), value);
-                break;
             default:
-                // 默认使用 Code 128
-                printer.printBarcode128(component.getX(), component.getY(), component.getHeight(), value);
+                // 对于 CODE39、EAN8、UPCE 等，使用通用的 addBarcode 方法
+                printer.addBarcode(component.getX(), component.getY(), value, 
+                    CpclPrinter.BarcodeType.valueOf(component.getBarcodeType().name()), 
+                    component.getBarWidth(), component.getHeight());
                 break;
         }
     }
