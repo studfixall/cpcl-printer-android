@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write
   packages: write
+  id-token: write
 
 jobs:
   build:
@@ -37,6 +38,15 @@ jobs:
       with:
         name: debug-apk
         path: app/build/outputs/apk/debug/*.apk
+        
+    - name: Delete old release
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      continue-on-error: true
+      run: |
+        gh release delete latest --yes || true
+        gh api --method DELETE /repos/${{ github.repository }}/git/refs/tags/latest || true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
     - name: Create Release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
